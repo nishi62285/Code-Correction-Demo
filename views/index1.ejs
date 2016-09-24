@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Welcome to Pcrs & Mvrs</title>
+  <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="/javascripts/angular-route.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.js"></script>
+   
+    <script>
+
+        function HandleBackFunctionality() {
+             
+            if (Storage != undefined) {
+                if (PackersMovers.From != "")
+                    localStorage.setItem('data', JSON.stringify(PackersMovers));
+                else {
+                    PackersMovers = JSON.parse(localStorage.data);
+                }
+            }
+        }
+
+        PackersMovers = {};
+        PackersMovers.From = '';
+        PackersMovers.To = '';
+        PackersMovers.isApartment = '';
+        PackersMovers.floor = '';
+        PackersMovers.isPackagingRequired = true;
+        PackersMovers.isElevatoravialableFrom = true;
+        PackersMovers.isLoadingRequired = true;
+        PackersMovers.isUnPackagingRequired = true;
+        PackersMovers.isElevatoravailableTo = true;
+        PackersMovers.isUnLoadingRequired = true;
+
+        function ReloadData() {
+
+        }
+
+        var myApp = angular.module('app',['ngRoute']);
+        
+        myApp.directive('userlogin',function($http,$location){
+            
+            var dir = {};
+            dir.restrict ='E';
+            //dir.template = '<div>{{templateText}}-{{templateData.textToDisplay}}<br><span ng-transclude ng-click ="alert()"></span></div>';
+            dir.templateUrl = '../view/UserLoginTemplate.ejs';
+            dir.scope = {
+                 templateText : '@',
+                 templateData : '='
+            };
+          
+            dir.transclude = true;
+            dir.controller = function($scope)
+            {
+                debugger;
+                $scope.show = false;
+                $scope.templateText = $scope.templateText + ':-->';
+                $scope.isError = false;
+                $scope.Login = function(){
+                       debugger;
+                $.ajax({
+                type: 'GET',
+                contentType: 'application/json',
+                url: '/users/AuthenticateUser/'+$scope.userName+'/'+$scope.userPassword,						
+                success: function(data) { 
+                   // debugger;
+                 var cred = JSON.parse(data);
+                    
+                    if(cred != undefined){
+                       
+                        $scope.$apply(function(){
+                            $scope.isError = false;    
+                            $scope.error ='';  
+                             if(Storage != null)
+                            {
+                                 localStorage.setItem('user', JSON.stringify(cred[0]));
+                            }
+                           $location.path('/Index');
+                            });     
+                    }
+                },
+                    error : function(data){
+                        
+                        if(data.status === 500){
+                        
+                            $scope.$apply(function(){
+                            $scope.isError = true;    
+                            $scope.error ='Not Found';    
+                            });   
+                        }
+                    }
+                }); 
+                    
+                };
+                $scope.ShowDiv = function(){
+                
+                    $scope.show = true;
+                };
+                  $scope.UpdatePassword = function(){
+            debugger;
+                 $.ajax({
+                type: 'GET',
+                contentType: 'application/json',
+                url: '/users/UpdatePassword/'+$scope.newUserName+'/'+$scope.newUserPassword,						
+                success: function(data) { 
+                   debugger;
+                 var cred = JSON.parse(data);
+                    $scope.$apply(function(){
+                    $scope.isError = false;    
+                    $scope.error ='';  
+                    if(Storage != null)
+                    {
+                     localStorage.setItem('user', JSON.stringify(cred));
+                    }
+                    $location.path('/Index');        
+                    });
+                
+                },
+                    error : function(data){
+                        
+                        if(data.status === 500){
+                        debugger;
+                            $scope.$apply(function(){
+                            $scope.isError = true;    
+                            $scope.error ='Not Found';    
+                            });   
+                        }   
+                    }
+                });
+            }
+            };
+            //dir.controller = 'UserController';
+            dir.compile = function(element,attribute)
+            {
+                debugger;
+                //attribute.templateText = attribute.templateText + ':-->';
+                $(element.find('button')[0]).attr('style','width:51px;height:19px;').text('Login');
+                
+                var linkFunction = function($scope,element,attribute,cntrl)
+                {
+                    debugger;
+                    $scope.UserController = cntrl;
+                    debugger;
+                    $scope.templateText = $scope.templateText + ':-->';
+                }
+                return linkFunction;
+            };
+            return dir;
+        });
+
+        myApp.directive('usersignin',function($location){
+           
+            var dir = {};
+            dir.restrict = 'E';
+            dir.templateUrl = '../view/UserRegistrationTemplate.ejs';
+            dir.controller = function($scope){
+                
+                $scope.SignIn = function(){
+                debugger;
+                var login = {};
+                login.UserName = $scope.userName;
+                login.Password = $scope.userPassword;
+                login.Email = $scope.userEmail;
+                $.ajax({
+                type: 'POST',
+                data: JSON.stringify(login),
+                contentType: 'application/json',
+                url: '/users/save',						
+                success: function(data) { 
+                debugger;
+                    $scope.$apply(function(){
+                    $location.path('/User');
+                });
+                    
+                },
+                error : function(error){
+                debugger;
+                    var errorMsg = error;
+                        
+                }
+                });
+                    
+                }
+            }
+            dir.transclude = true;
+            
+            dir.compile = function(element,attribute){
+                
+                element.find('button').attr('style','width:66;height:20px').text('Sign In');
+                
+                var link = function(element,attribute,$scope){//post link
+                    
+                }
+                return link;
+            };
+            return dir;
+            
+        });
+        
+        myApp.value('Data', 0);
+        
+		myApp.config(function ($routeProvider) {
+
+		$routeProvider.when(
+		'/Article', {
+		templateUrl: 'view/Article.ejs',
+		controller: 'ArticleController'
+		}).when('/Home', {
+		templateUrl: 'view/Home.ejs',
+		controller: 'HomeController'
+		}).when('/Details', {
+		templateUrl: 'view/Details.ejs',
+		controller: 'DetailsController'
+		}).when('/Order',{
+          templateUrl : 'view/Order.ejs',
+          controller : 'OrderController' 
+        }).when('/Index',{
+            templateUrl : 'view/Index.ejs',
+            controller : 'IndexController'
+        }).when('/User',{
+            templateUrl : 'view/User.ejs',
+            controller : 'UserController'
+        }).when('/SignIn',{
+        templateUrl : 'view/SignIn.ejs',
+        controller : 'SignInController'
+        }).when('/',{
+        templateUrl : 'view/Poc.html',
+        controller : 'PocController'
+        }).when('/Search',
+		{templateUrl :'view/Search.ejs',
+		controller : 'SearchController'}
+		).when('/POC',
+		{templateUrl :'view/Poc.ejs',
+		controller : 'PocController'}
+		);
+            
+		});
+
+		
+myApp.filter('SetData',function(){
+    
+    return function(input,option1,option2)
+    {
+        debugger;
+        
+        return input;
+    }
+    
+});    
+        
+myApp.controller('SearchController',function($scope){
+    
+    debugger;
+     
+            $.ajax({
+			type: 'GET',
+			//data: JSON.stringify(PackersMovers),
+			contentType: 'application/json',
+			url: '/searches/GetPackersData',						
+			success: function(data) { 
+            debugger;
+                
+                $scope.$apply(function(){
+                $scope.packers = JSON.parse(data);    
+                });
+                
+                
+			}
+			});  
+    
+    
+});
+        
+        
+        myApp.controller('IndexController',function($scope){
+           var cred ={};
+            debugger;
+            if(Storage != null && (localStorage.user != undefined && localStorage.user != '')){
+                cred = JSON.parse(localStorage.user); 
+                $scope.user = cred.UserName;
+            }
+            else
+                {
+                    $scope.user = '';
+                }
+                         
+            
+        });
+        
+        myApp.controller('HomeController', function ($scope) {
+            $scope.From = PackersMovers.From;
+            $scope.To = PackersMovers.To;
+            $scope.save = function () {
+                debugger;
+                PackersMovers.To = $scope.To;
+                PackersMovers.From = $scope.From;
+
+                if (Storage != undefined) {
+                    localStorage.setItem('data', JSON.stringify(PackersMovers));
+                }
+            }
+        });
+
+        myApp.controller('ArticleController', ['$scope', function ($scope) {
+            var dt = {};
+            if (Storage != undefined && localStorage.data != undefined) {
+                dt = JSON.parse(localStorage.data);
+                PackersMovers = dt;
+            }
+
+
+            if (dt != undefined) {
+                $scope.From = dt.From;
+                $scope.To = dt.To;
+                $scope.isApartment = dt.isApartment;
+                $scope.floor = dt.floor;
+                $scope.isPackagingRequired = dt.isPackagingRequired;
+                $scope.isElevatoravialableFrom = dt.isElevatoravialableFrom;
+                $scope.isLoadingRequired = dt.isLoadingRequired;
+                //$scope.isUnPackagingRequired = dt.isUnPackagingRequir;
+                //$scope.isElevatoravailableTo = dt.isElevatoravailableTo;
+                //$scope.isUnLoadingRequired = dt.isUnLoadingRequired;
+            }
+            else {
+                $scope.From = PackersMovers.From;
+                $scope.To = PackersMovers.To;
+                $scope.isApartment = PackersMovers.isApartment;
+                $scope.floor = PackersMovers.floor;
+                $scope.isPackagingRequired = PackersMovers.isPackagingRequired;
+                $scope.isElevatoravialableFrom = PackersMovers.isElevatoravialableFrom;
+                $scope.isLoadingRequired = PackersMovers.isLoadingRequired;
+                //$scope.isUnPackagingRequired = PackersMovers.isUnPackagingRequired;
+                //$scope.isElevatoravailableTo = PackersMovers.isElevatoravailableTo;
+                //$scope.isUnLoadingRequired = PackersMovers.isUnLoadingRequired;
+            }
+
+            $scope.isFlat = true;
+
+            $scope.save = function () {
+                debugger;
+                PackersMovers.To = $scope.To;
+                PackersMovers.From = $scope.From;
+                PackersMovers.isApartment = $scope.isFlat ? true : false;
+                PackersMovers.floor = $scope.floor;
+                PackersMovers.isPackagingRequired = $scope.isPackagingRequired;
+                PackersMovers.isElevatoravialableFrom = $scope.isElevatoravialableFrom;
+                PackersMovers.isLoadingRequired = $scope.isLoadingRequired;
+                //PackersMovers.isUnPackagingRequired = $scope.isUnPackagingRequired;
+                //PackersMovers.isElevatoravailableTo = $scope.isElevatoravailableTo;
+                //PackersMovers.isUnLoadingRequired = $scope.isUnLoadingRequired;
+
+                if (Storage != undefined) {
+                    localStorage.setItem('data', JSON.stringify(PackersMovers));
+                }
+            }
+
+        }]);
+
+        myApp.controller('DetailsController', function ($scope,$rootScope) {
+            var dt = {};
+            if (Storage != undefined && localStorage.data != undefined) {
+                dt = JSON.parse(localStorage.data);
+                PackersMovers = dt;
+            }
+            $scope.show=false;
+            $scope.PackersMovers = PackersMovers;
+            $scope.saveData = function()
+            {
+            $.ajax({
+			type: 'POST',
+			data: JSON.stringify(PackersMovers),
+			contentType: 'application/json',
+			url: '/save',						
+			success: function(data) { 
+            myApp.value('Data', data);
+            $rootScope.Data = data;
+			console.log(JSON.stringify(data));
+             if (Storage != undefined) {
+                localStorage.setItem('data', (data));
+            }
+			}
+			}); 
+                
+            }
+        });
+        
+        myApp.controller('OrderController',function($scope,$rootScope,$location){
+        debugger;
+            var dt = {};
+            if (Storage != undefined && localStorage.data != undefined) {
+                $scope.order = JSON.parse(localStorage.data);
+                $rootScope.Data = $scope.order;
+            }
+           // else
+            //{
+             //$rootScope.Data = JSON.parse(localStorage.data);
+        //    }
+              //$scope.$apply(function(){
+             // $scope.order = $rootScope.Data;    
+              //});
+              
+              $scope.Logout = function(){
+                  
+                  localStorage.setItem('data','');
+                  localStorage.setItem('user','');
+				  PackersMovers = {};
+                 // $scope.$apply(function(){
+                      $location.path('/User');
+                  //});
+                  
+              }
+              
+           
+          });
+        
+        myApp.controller('UserController',function($scope){
+            
+           
+            $scope.data = {};
+            $scope.data.textToDisplay='Welcome to User Registration Module';
+          
+            
+        });
+        
+        myApp.controller('SignInController',function($scope){
+            
+            $scope.text ='Hello User';
+            
+        });
+        
+        myApp.service('PoCDataSerice',function($q,$http){
+           
+            var defer = $q.defer();
+            
+            this.GetPOCData = function()
+            {
+                
+                return $http.get('/poc/GetData').success(function(res){
+                debugger;
+                    if(res!=null)
+                        {
+                            defer.resolve(res);
+                            return defer.promise;
+                        }
+                    
+                }).error(function(error){
+                    debugger;
+                    return defer.reject(error);
+                    
+                });
+            }
+            
+        });
+        
+        
+        myApp.controller('PocController',function($scope,PoCDataSerice){
+           debugger;
+            PoCDataSerice.GetPOCData().then(function(data){
+			debugger;
+			var objCount = [];
+			var objException = [];
+			angular.forEach(data.data, function(value, key) {
+			objCount.push(value.count);
+			objException.push(value.value);
+			});
+
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: objException,
+        datasets: [{
+            label: '# of Votes',
+            data: objCount,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+                debugger;
+                
+            },function(error){
+                
+                debugger;
+            });
+            
+        });
+        
+    </script>
+</head>
+<body ng-app="app" onbeforeunload="HandleBackFunctionality()" onload="ReloadData()">
+    
+    <div ng-view>
+	</div>
+</body>
+</html>
