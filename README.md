@@ -15,8 +15,11 @@ Idea is to get into Developers shoe and understand their issues.
 <b>2 How it works:</b>
 
 Implementation has been carried out in 3 phases.
+
 1. Processing Log files and collecting useful information.
+
 2. Applying analytics on the information collected in the previous step to get useful insights.
+
 3. Display insights to the end user 
 
 <b>2.1 Processing Log files and collecting useful information:</b> 
@@ -31,6 +34,7 @@ as we are dealing with large number of log files here.
 Big Data would provide us with Parallel Distribution, Processing, and scalability.
 
 A script is written in Pig Scripting language which does following tasks:
+
 •	Read every log file
 
 •	Extract data such as error type, user name, error description, date time etc. 
@@ -60,33 +64,42 @@ We are going to calculate total number of unique exceptions.
 This would give us some useful insight like:
 
 •	Exception having highest count should be given quick attention as most of the developers are facing it on the larger scale.
+
 •	If Exception is occurring repeatedly in a close time interval, we might say that developer is not understood / not aware of the underlying concept.
+
 •	We can visualize “Exception vs. Exception Count” at Technology level, Developer level, and Project level etc.
+
 •	Cases when developer is not able to finish task within given time frame, we can refer to above report to get insights.
+
 •	Based on the Exception Count we will be able to define areas where a developer needs to be given exposure/training.
+
 
 A pig script would apply analytics and result of which would be stored in the Mongo DB for further display.
 
-2.3 Display:
+<b>2.3 Display:</b>
 
 To display analytics to the end user we made a simple MEAN Stack application which will fetch data from 
 Mongo DB database and display it in the form of Bar chart. We used Chart.js JavaScript library for the same.
 
-3   Things to look after: 
+<b>3 Things to look after:</b> 
 
 So far we have considered and implemented a simple analytics and realized the importance of it. 
 In the similar way we can implement complex business analytics to get more insights.
 We can also automate this process to make it near real-time. 
 
-4    Useful Resources:
+<b>4 Useful Resources:</b>
  
 Contains Input, Output files used, Pig script, Jar files needed to run pig script, images of azure etc.
 
-5    References:
+<b>5 References:</b>
 
 •	RUNNING APACHE PIG (PIG LATIN) AT APACHE HADOOP ON WINDOWS AZURE
+
 •	Learn to Build Modern Web Apps with MEAN
+
 •	Use Pig with Hadoop on HDInsight
+
 •	What is Hadoop in the cloud? An introduction to the Hadoop ecosystem in HDInsight
+
 
 
