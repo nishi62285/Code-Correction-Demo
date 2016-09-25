@@ -7,6 +7,7 @@
 5.	References
 
 <b>1 Introduction</b>:
+
 This passion project was an idea conceived from past experiences in big companies. 
 Here in we monitored the coding style of each developer, logged their mistakes during the real-time coding and uploaded those on cloud.
 Using PIG scripts/Map Reduce programs and visualize the result using tableau/Chart.js. 
