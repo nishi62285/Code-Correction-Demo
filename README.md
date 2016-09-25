@@ -49,7 +49,7 @@ This information is stored at a temporary location on azure storage which will b
 
 <b>2.2 Applying Analytics:</b>
 
-      Why Analytics?
+      <b>Why Analytics?</b>
 •	Analytics makes processes more strategic to the business
 
 •	Analytics can combine disparate data streams to improve business results
