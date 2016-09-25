@@ -12,7 +12,7 @@ Here in we monitored the coding style of each developer, logged their mistakes d
 Using PIG scripts/Map Reduce programs and visualize the result using tableau/Chart.js. 
 Idea is to get into Developers shoe and understand their issues.
 
-<b>2 How it works:<b>
+<b>2 How it works:</b>
 
 Implementation has been carried out in 3 phases.
 1. Processing Log files and collecting useful information.
@@ -32,8 +32,11 @@ Big Data would provide us with Parallel Distribution, Processing, and scalabilit
 
 A script is written in Pig Scripting language which does following tasks:
 •	Read every log file
+
 •	Extract data such as error type, user name, error description, date time etc. 
+
 •	Dump this information in a container for further use.
+
 At the end of above process, we have information such as error type, user name, error description, date time available to us to 
 apply analytics.To create a demo, we selected few log files of Visual studio tool and uploaded them on Azure Cloud.
 Log files have XML formatted data so we decided to go for Pig scripting as it has a very good support for data in XML format.
