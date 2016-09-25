@@ -92,6 +92,9 @@ We can also automate this process to make it near real-time.
  
 Contains Input, Output files used, Pig script, Jar files needed to run pig script, images of azure etc.
 
+<b>Live Demo :</b>
+<img src="https://cloud.githubusercontent.com/assets/11587666/18814432/e32e008e-8330-11e6-8146-997a2e9ccc2d.png" />
+
 <b>5 References:</b>
 
 •	RUNNING APACHE PIG (PIG LATIN) AT APACHE HADOOP ON WINDOWS AZURE
