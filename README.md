@@ -47,9 +47,9 @@ Log files have XML formatted data so we decided to go for Pig scripting as it ha
 We created a hadoop cluster in Azure cloud to Process log files and collect useful information. 
 This information is stored at a temporary location on azure storage which will be used for further processing. 
 
-<b>2.2 Applying Analytics:</b>
+<b>2.2 Applying Analytics:
 
-      <b>Why Analytics?</b>
+       Why Analytics?
 •	Analytics makes processes more strategic to the business
 
 •	Analytics can combine disparate data streams to improve business results
