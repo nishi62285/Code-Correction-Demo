@@ -1,4 +1,4 @@
-Contents
+<b>Contents</b>
 
 1.	Introduction
 2.	How it works.
@@ -6,20 +6,20 @@ Contents
 4.	Useful Stuff
 5.	References
 
-1 Introduction:
+<b>1 Introduction</b>:
 This passion project was an idea conceived from past experiences in big companies. 
 Here in we monitored the coding style of each developer, logged their mistakes during the real-time coding and uploaded those on cloud.
 Using PIG scripts/Map Reduce programs and visualize the result using tableau/Chart.js. 
 Idea is to get into Developers shoe and understand their issues.
 
-2 How it works:
+<b>2 How it works:<b>
 
 Implementation has been carried out in 3 phases.
 1. Processing Log files and collecting useful information.
 2. Applying analytics on the information collected in the previous step to get useful insights.
 3. Display insights to the end user 
 
-2.1 Processing Log files and collecting useful information: 
+<b>2.1 Processing Log files and collecting useful information:</b> 
 
 In our programming life we use different types of development tools such as Visual Studio, Net Beans, and Android Studio etc. 
 Choice of the tool is largely driven by language we wish to use. While coding with such tools whenever there is any exception,
@@ -40,12 +40,15 @@ Log files have XML formatted data so we decided to go for Pig scripting as it ha
 We created a hadoop cluster in Azure cloud to Process log files and collect useful information. 
 This information is stored at a temporary location on azure storage which will be used for further processing. 
 
-2.2 Applying Analytics:
+<b>2.2 Applying Analytics:</b>
 
       Why Analytics?
 •	Analytics makes processes more strategic to the business
+
 •	Analytics can combine disparate data streams to improve business results
+
 •	predictive and prescriptive modeling
+
 And it goes on and on and on…
 
 Here we applied simple analytics on the information collected above using Pig script.
