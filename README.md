@@ -106,4 +106,9 @@ Contains Input, Output files used, Pig script, Jar files needed to run pig scrip
 •	What is Hadoop in the cloud? An introduction to the Hadoop ecosystem in HDInsight
 
 
+#FUTURE SCOPE
+
+Adding live analytics. Generating data streams from IDE logs as programmers type the code in the IDE. Creating a plugin to see the analytics on the side while coding and self-analyzing the mistake committed. 
+
+
 
